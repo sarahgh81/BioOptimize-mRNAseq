@@ -1,16 +1,21 @@
 """BioOptimize mRNA-seq Pipeline
 
 AI-assisted, reproducible analysis from FASTQ to differential expression.
-Now with single-cell RNA-seq support.
+Now with single-cell RNA-seq + multi-sample integration support.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 from .align import compare_aligners, run_alignment
 from .quantify import quantify_samples
 from .de import run_differential_expression
 from .advisor import AIParameterAdvisor
-from .singlecell import analyze_single_cell, quantify_single_cell, plot_single_cell
+from .singlecell import (
+    analyze_single_cell,
+    quantify_single_cell,
+    plot_single_cell,
+    integrate_samples,
+)
 
 __all__ = [
     "compare_aligners",
@@ -21,4 +26,5 @@ __all__ = [
     "analyze_single_cell",
     "quantify_single_cell",
     "plot_single_cell",
+    "integrate_samples",
 ]
