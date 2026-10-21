@@ -18,6 +18,12 @@ dependencies:
   - r-deseq2
   - r-edger
   - r-tidyverse
+  # Single-cell
+  - scanpy
+  - anndata
+  - leidenalg
+  - python-igraph
+  - umap-learn
   - pandas
   - numpy
   - pyyaml
