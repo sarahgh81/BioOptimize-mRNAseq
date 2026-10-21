@@ -9,6 +9,9 @@
 
 Part of the BioOptimize AI ecosystem — an intelligent workspace for molecular biology that turns samples into insights.
 
+> **Latest (v0.3):** Multi-sample integration (Harmony / scVI / BBKNN) is now supported.  
+> See [CHANGELOG.md](CHANGELOG.md) and [docs/LAUNCH.md](docs/LAUNCH.md).
+
 ## Why BioOptimize-mRNAseq?
 
 Traditional RNA-seq pipelines are powerful but opaque. This project makes them:
@@ -94,7 +97,7 @@ BioOptimize-mRNAseq/
 │   └── ...
 ├── config/default.yaml  # Includes single_cell + integration section
 ├── examples/
-├── docs/               # Includes SINGLE_CELL.md
+├── docs/               # Includes SINGLE_CELL.md and LAUNCH.md
 ├── tests/
 ├── environment.yml      # scanpy, harmonypy, etc.
 └── README.md
@@ -130,6 +133,8 @@ If you use this in research or teaching:
 ## Contributing
 
 PRs welcome! Please open an issue first for major changes. All contributions must respect research-use-only guidelines.
+
+See also: [docs/LAUNCH.md](docs/LAUNCH.md) for ready-to-use announcement posts.
 
 ---
 
