@@ -18,8 +18,22 @@ differential_expression:
   alpha: 0.05
   lfc_threshold: 0.5
 
+# Single-cell RNA-seq settings
+single_cell:
+  quantification: starsolo          # starsolo | alevin | cellranger
+  chemistry: 10xv3
+  min_genes: 200
+  min_cells: 3
+  max_mito_pct: 20
+  n_top_genes: 2000
+  n_neighbors: 15
+  resolution: 0.5
+  clustering: leiden
+  marker_method: wilcoxon
+
 references:
   human:
     genome: /refs/hg38/genome.fa
     gtf: /refs/hg38/genes.gtf
     salmon_index: /refs/hg38/salmon_index
+    starsolo_index: /refs/hg38/starsolo
