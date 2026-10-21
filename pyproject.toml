@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "biooptimize-mrnaseq"
-version = "0.1.0"
-description = "AI-assisted mRNA-seq analysis pipeline for BioOptimize AI"
+version = "0.2.0"
+description = "AI-assisted RNA-seq analysis pipeline (bulk + single-cell) for BioOptimize AI"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -23,6 +23,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7", "pytest-cov", "ruff"]
+sc = ["scanpy", "anndata", "leidenalg"]
 
 [project.scripts]
 biooptimize-rnaseq = "pipeline.cli:main"
