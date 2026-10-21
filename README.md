@@ -5,7 +5,7 @@
 [![CI](https://github.com/sarahgh81/BioOptimize-mRNAseq/actions/workflows/ci.yml/badge.svg)](https://github.com/sarahgh81/BioOptimize-mRNAseq/actions)
 [![Stars](https://img.shields.io/github/stars/sarahgh81/BioOptimize-mRNAseq)](https://github.com/sarahgh81/BioOptimize-mRNAseq/stargazers)
 
-**AI-assisted, reproducible RNA-seq analysis — bulk and single-cell — from raw FASTQ to biological insights.**
+**AI-assisted, reproducible RNA-seq analysis — bulk and single-cell (with multi-sample integration) — from raw FASTQ to biological insights.**
 
 Part of the BioOptimize AI ecosystem — an intelligent workspace for molecular biology that turns samples into insights.
 
@@ -18,6 +18,7 @@ Traditional RNA-seq pipelines are powerful but opaque. This project makes them:
 - **Reproducible** — Conda/Snakemake-ready, version-controlled configs
 - **Educational & Professional** — beautiful docs, examples, and CI
 - **Dual-mode** — one toolkit for bulk mRNA-seq **and** single-cell RNA-seq
+- **Multi-sample ready** — Harmony, scVI, and BBKNN integration for multi-sample studies
 
 ## Features
 
@@ -25,8 +26,9 @@ Traditional RNA-seq pipelines are powerful but opaque. This project makes them:
 |-------|------|-------------|------------|
 | QC | FastQC, MultiQC | mito %, gene counts | Automated reports |
 | Alignment / Quant | **STAR**, **HISAT2**, Salmon | **STARsolo**, Alevin-fry | Side-by-side comparison |
+| Integration | — | **Harmony**, scVI, BBKNN | Multi-sample batch correction |
 | Analysis | DESeq2, edgeR | Scanpy (PCA, UMAP, Leiden) | Marker genes, clusters |
-| Visualization | PCA, volcano, heatmaps | UMAP, QC violins, markers | Interactive options |
+| Visualization | PCA, volcano, heatmaps | UMAP by cluster & batch | Interactive options |
 | AI Layer | Parameter advisor | sc-specific recommendations | Extensible for LLMs |
 
 ## Quick Start
@@ -62,23 +64,23 @@ print(AIParameterAdvisor().pretty(
 FASTQ → QC → Alignment (STAR/HISAT2) → Quantification → DE → Insights
 ```
 
-**Single-cell**
+**Single-cell (with integration)**
 ```
-FASTQ → STARsolo/Alevin → AnnData → QC → Norm → PCA/UMAP → Leiden → Markers
+FASTQ → STARsolo/Alevin → AnnData → QC → Norm → Integration → PCA/UMAP → Leiden → Markers
 ```
 
-### Single-cell example
+### Single-cell + multi-sample example
 
 ```python
 from pipeline.singlecell import analyze_single_cell
 
-# After quantification (or with a demo matrix)
 processed = analyze_single_cell(
-    count_matrix="results/singlecell/counts.h5ad",
-    min_genes=200,
+    count_matrix="results/combined.h5ad",
+    batch_key="sample",
+    integration="harmony",   # or "scvi"
     resolution=0.5,
 )
-print(f"Processed AnnData saved to {processed}")
+print(f"Integrated AnnData saved to {processed}")
 ```
 
 ## Project Structure
@@ -87,25 +89,25 @@ print(f"Processed AnnData saved to {processed}")
 BioOptimize-mRNAseq/
 ├── pipeline/
 │   ├── align.py          # Bulk alignment
-│   ├── singlecell.py     # Scanpy analysis + sc quant interface
+│   ├── singlecell.py     # Scanpy + integration (Harmony/scVI)
 │   ├── advisor.py        # AI recommendations (bulk + sc)
 │   └── ...
-├── config/default.yaml  # Includes single_cell section
+├── config/default.yaml  # Includes single_cell + integration section
 ├── examples/
-├── docs/
+├── docs/               # Includes SINGLE_CELL.md
 ├── tests/
-├── environment.yml      # Now includes scanpy, leidenalg, etc.
+├── environment.yml      # scanpy, harmonypy, etc.
 └── README.md
 ```
 
 ## Installation Details
 
-See [docs/INSTALL.md](docs/INSTALL.md) for full setup including reference genomes and tool dependencies.
+See [docs/INSTALL.md](docs/INSTALL.md) and [docs/SINGLE_CELL.md](docs/SINGLE_CELL.md) for full setup.
 
-For single-cell you will also want:
+For single-cell + integration:
 - STARsolo (included with STAR ≥ 2.7.9a)
-- or Alevin-fry
-- Scanpy ecosystem (installed via the conda environment)
+- Scanpy ecosystem + harmonypy (via conda environment)
+- Optional: `pip install scvi-tools` for scVI
 
 ## Citation
 
@@ -114,7 +116,7 @@ If you use this in research or teaching:
 ```bibtex
 @software{BioOptimize_mRNAseq,
   author = {Ghasemi, Sarah},
-  title = {BioOptimize mRNA-seq: AI-Assisted RNA-seq Pipeline (Bulk + Single-cell)},
+  title = {BioOptimize mRNA-seq: AI-Assisted RNA-seq Pipeline (Bulk + Single-cell + Integration)},
   year = {2026},
   url = {https://github.com/sarahgh81/BioOptimize-mRNAseq}
 }
