@@ -30,6 +30,10 @@ single_cell:
   resolution: 0.5
   clustering: leiden
   marker_method: wilcoxon
+  # Multi-sample integration
+  integration: harmony             # harmony | scvi | bbknn | none
+  batch_key: sample
+  n_pcs: 30
 
 references:
   human:
