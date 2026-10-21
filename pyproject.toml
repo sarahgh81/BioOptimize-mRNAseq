@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "biooptimize-mrnaseq"
-version = "0.2.0"
-description = "AI-assisted RNA-seq analysis pipeline (bulk + single-cell) for BioOptimize AI"
+version = "0.3.0"
+description = "AI-assisted RNA-seq analysis pipeline (bulk + single-cell + multi-sample integration) for BioOptimize AI"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -23,7 +23,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7", "pytest-cov", "ruff"]
-sc = ["scanpy", "anndata", "leidenalg"]
+sc = ["scanpy", "anndata", "leidenalg", "harmonypy"]
+integration = ["harmonypy", "scvi-tools"]
 
 [project.scripts]
 biooptimize-rnaseq = "pipeline.cli:main"
