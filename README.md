@@ -5,7 +5,7 @@
 [![CI](https://github.com/sarahgh81/BioOptimize-mRNAseq/actions/workflows/ci.yml/badge.svg)](https://github.com/sarahgh81/BioOptimize-mRNAseq/actions)
 [![Stars](https://img.shields.io/github/stars/sarahgh81/BioOptimize-mRNAseq)](https://github.com/sarahgh81/BioOptimize-mRNAseq/stargazers)
 
-**AI-assisted, reproducible mRNA-seq analysis from raw FASTQ to differential expression insights.**
+**AI-assisted, reproducible RNA-seq analysis — bulk and single-cell — from raw FASTQ to biological insights.**
 
 Part of the BioOptimize AI ecosystem — an intelligent workspace for molecular biology that turns samples into insights.
 
@@ -13,21 +13,21 @@ Part of the BioOptimize AI ecosystem — an intelligent workspace for molecular 
 
 Traditional RNA-seq pipelines are powerful but opaque. This project makes them:
 
-- **Transparent** — clear comparisons between STAR vs HISAT2, Salmon vs featureCounts
-- **AI-augmented** — intelligent parameter suggestions and result interpretation hooks
+- **Transparent** — clear comparisons between STAR vs HISAT2, Salmon vs featureCounts, and STARsolo vs Alevin
+- **AI-augmented** — intelligent parameter suggestions for both bulk and single-cell experiments
 - **Reproducible** — Conda/Snakemake-ready, version-controlled configs
 - **Educational & Professional** — beautiful docs, examples, and CI
+- **Dual-mode** — one toolkit for bulk mRNA-seq **and** single-cell RNA-seq
 
 ## Features
 
-| Stage | Tools Supported | Highlights |
-|-------|-----------------|------------|
-| QC | FastQC, MultiQC | Automated reports |
-| Alignment | **STAR**, **HISAT2** | Side-by-side comparison mode |
-| Quantification | Salmon (quasi), featureCounts, RSEM | Transcript & gene level |
-| Differential Expression | DESeq2, edgeR | R integration via rpy2 or standalone |
-| Visualization | PCA, volcano, heatmaps | Interactive Plotly options |
-| AI Layer | Parameter advisor, result summarizer | Extensible for LLMs |
+| Stage | Bulk | Single-cell | Highlights |
+|-------|------|-------------|------------|
+| QC | FastQC, MultiQC | mito %, gene counts | Automated reports |
+| Alignment / Quant | **STAR**, **HISAT2**, Salmon | **STARsolo**, Alevin-fry | Side-by-side comparison |
+| Analysis | DESeq2, edgeR | Scanpy (PCA, UMAP, Leiden) | Marker genes, clusters |
+| Visualization | PCA, volcano, heatmaps | UMAP, QC violins, markers | Interactive options |
+| AI Layer | Parameter advisor | sc-specific recommendations | Extensible for LLMs |
 
 ## Quick Start
 
@@ -43,48 +43,69 @@ conda activate biooptimize-rnaseq
 # Or pip
 pip install -e .
 
-# Run example
-python -m pipeline.demo --aligner star --quant salmon
+# Bulk demo
+python -m pipeline.demo
+
+# Single-cell advice
+python -c "
+from pipeline.advisor import AIParameterAdvisor
+print(AIParameterAdvisor().pretty(
+    AIParameterAdvisor().suggest(assay='single_cell', expected_cells=8000)
+))
+"
 ```
 
 ## Pipeline Overview
 
+**Bulk**
 ```
-FASTQ → QC → Alignment (STAR/HISAT2) → Quantification → DE Analysis → Insights
-                 ↘─────────────────────↗
-                   AI Parameter Advisor
+FASTQ → QC → Alignment (STAR/HISAT2) → Quantification → DE → Insights
 ```
 
-### Example: Compare Aligners
+**Single-cell**
+```
+FASTQ → STARsolo/Alevin → AnnData → QC → Norm → PCA/UMAP → Leiden → Markers
+```
+
+### Single-cell example
 
 ```python
-from pipeline.align import compare_aligners
+from pipeline.singlecell import analyze_single_cell
 
-results = compare_aligners(
-    samples="examples/samples.csv",
-    reference="hg38",
-    aligners=["star", "hisat2"]
+# After quantification (or with a demo matrix)
+processed = analyze_single_cell(
+    count_matrix="results/singlecell/counts.h5ad",
+    min_genes=200,
+    resolution=0.5,
 )
-print(results.summary())  # Mapping rates, unique reads, runtime
+print(f"Processed AnnData saved to {processed}")
 ```
 
 ## Project Structure
 
 ```
 BioOptimize-mRNAseq/
-├── pipeline/           # Core analysis modules
-├── config/             # YAML configs
-├── examples/           # Sample sheets & demo data pointers
-├── docs/               # Detailed guides
-├── tests/              # Unit & integration tests
-├── .github/workflows/  # CI
-├── environment.yml
+├── pipeline/
+│   ├── align.py          # Bulk alignment
+│   ├── singlecell.py     # Scanpy analysis + sc quant interface
+│   ├── advisor.py        # AI recommendations (bulk + sc)
+│   └── ...
+├── config/default.yaml  # Includes single_cell section
+├── examples/
+├── docs/
+├── tests/
+├── environment.yml      # Now includes scanpy, leidenalg, etc.
 └── README.md
 ```
 
 ## Installation Details
 
-See [docs/INSTALL.md](docs/INSTALL.md) for full setup including reference genomes and tool dependencies (STAR, HISAT2, Salmon, R packages).
+See [docs/INSTALL.md](docs/INSTALL.md) for full setup including reference genomes and tool dependencies.
+
+For single-cell you will also want:
+- STARsolo (included with STAR ≥ 2.7.9a)
+- or Alevin-fry
+- Scanpy ecosystem (installed via the conda environment)
 
 ## Citation
 
@@ -93,7 +114,7 @@ If you use this in research or teaching:
 ```bibtex
 @software{BioOptimize_mRNAseq,
   author = {Ghasemi, Sarah},
-  title = {BioOptimize mRNA-seq: AI-Assisted RNA-seq Pipeline},
+  title = {BioOptimize mRNA-seq: AI-Assisted RNA-seq Pipeline (Bulk + Single-cell)},
   year = {2026},
   url = {https://github.com/sarahgh81/BioOptimize-mRNAseq}
 }
