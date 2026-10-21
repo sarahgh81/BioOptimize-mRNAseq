@@ -24,6 +24,7 @@ dependencies:
   - leidenalg
   - python-igraph
   - umap-learn
+  - harmonypy
   - pandas
   - numpy
   - pyyaml
@@ -31,3 +32,5 @@ dependencies:
   - rich
   - pip:
     - -e .
+    # Optional deep integration:
+    # - scvi-tools
