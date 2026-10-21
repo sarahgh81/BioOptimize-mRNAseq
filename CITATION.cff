@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Ghasemi
+    given-names: Sarah
+title: "BioOptimize mRNA-seq: AI-Assisted RNA-seq Analysis Pipeline"
+version: 0.1.0
+date-released: 2026-10-21
+url: "https://github.com/sarahgh81/BioOptimize-mRNAseq"
+license: MIT
