@@ -1,0 +1,25 @@
+# BioOptimize mRNA-seq default configuration
+
+alignment:
+  preferred: star
+  threads: 8
+  star:
+    twopass: true
+    sjdbOverhang: 149
+  hisat2:
+    splice_aware: true
+
+quantification:
+  method: salmon
+  library_type: A  # auto-detect
+
+differential_expression:
+  method: deseq2
+  alpha: 0.05
+  lfc_threshold: 0.5
+
+references:
+  human:
+    genome: /refs/hg38/genome.fa
+    gtf: /refs/hg38/genes.gtf
+    salmon_index: /refs/hg38/salmon_index
